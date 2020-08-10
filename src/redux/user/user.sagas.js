@@ -1,4 +1,4 @@
-import { takeLatest, put, all, call  } from 'redux-saga/effects';
+import { takeLatest, put, all, call } from 'redux-saga/effects';
 
 import UserActionTypes from './user.types';
 
@@ -26,7 +26,7 @@ export function* getSnapshotFromUserAuth(userAuth, additionalData) {
         signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() })
       );
     } catch (error) {
-        yield put(signInFailure(error));
+      yield put(signInFailure(error));
     }
 }
 
@@ -73,12 +73,13 @@ export function* signOut() {
 
 export function* signUp({ payload: { email, password, displayName }}) {
   try {
-    const { user } = auth.createUserWithEmailAndPassword(email, password);
-    yield put(signUpSuccess({user, additionalData: { displayName } }));
+    const { user } = yield auth.createUserWithEmailAndPassword(email, password);
+    yield put(signUpSuccess({ user, additionalData: { displayName } }));
   } catch (error) {
     yield put(signUpFailure(error));
   }
 }
+
 
 export function* onGoogleSignInStart() {
   yield takeLatest(UserActionTypes.GOOGLE_SIGN_IN_START, signInWithGoogle);
